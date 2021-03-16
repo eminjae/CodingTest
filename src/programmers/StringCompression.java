@@ -1,48 +1,48 @@
 package programmers;
 
+import java.util.*;
+
 public class StringCompression {
 
     public int solution(String s) {
 
-        int size = s.length();
-        int splitSize = 0;
-        int min = 1000;
+        int answer = s.length();
+        int len = s.length();
+        List<String> result = new ArrayList<>();
+        for(int i = 1 ; i <= len/2; i++){
+           List<String> str = new ArrayList<>();
+           int index = 0;
+           while(index< len){
+               String temp = index+i >= len ? s.substring(index) : s.substring(index, index+i);
+               str.add(temp);
+               index = index + i;
+           }
+           StringBuffer sb = new StringBuffer();
+           for(int j = 0; j < str.size();j++){
+               int cnt = 1;
+               String sample = str.get(j);
+               while(j+1 < str.size() && str.get(j).equals(str.get(j+1))){
+                    cnt++;
+                    j++;
+               }
+               if(cnt == 1) {
+                   sb.append(str.get(j));
+               }else {
+                   sb.append(cnt);
+                   sb.append(sample);
+               }
 
-        while(splitSize < size/2){
-            StringBuilder sb = new StringBuilder();
-            splitSize++;
 
-            for(int i = 0 ; i < s.length(); i++){
-                if(i+splitSize >= s.length()) break;
-                String current = s.substring(i, i+splitSize);
 
-                int cnt = 1;
-                boolean checkIfEqual = false;
-                for(int j = i+splitSize; j < s.length();){
-                    if(j+splitSize >= s.length()) break;
-                    String later = s.substring(j,j+splitSize);
-                    if(current.equals(later)){
-                        cnt++;
-                        checkIfEqual = true;
-                    }else {
-                        break;
-                    }
-                    j = j + splitSize;
-                }
-                if(checkIfEqual == true){
-                    sb.append(Integer.toString(cnt) + current);
-                    i = i + splitSize;
-                }else {
-                    sb.append(current);
-                }
-
-            }
-            min = Math.min(min, sb.length());
-
+           }
+            result.add(sb.toString());
         }
-        int answer = min;
+        for(int i= 0; i < result.size(); i++){
+            answer = Math.min(answer, result.get(i).length());
+        }
         return answer;
     }
+
     public static void main(String[] args) {
         System.out.println(new StringCompression().solution("aabbaccc"));
         System.out.println(new StringCompression().solution("ababcdcdababcdcd"));

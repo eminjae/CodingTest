@@ -5,27 +5,44 @@ import java.util.*;
 public class Printer {
     public int solution(int[] priorities, int location) {
         int answer = 0;
-        Queue<Integer> q = new LinkedList<>();
 
-
-        for(int i = 0 ; i < priorities.length; i++){
-            q.add(priorities[i]);
-
+        Queue<Node> queue = new LinkedList<>();
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(Collections.reverseOrder());
+        for(int i = 0 ;i < priorities.length; i++){
+            queue.add(new Node(i,priorities[i]));
+            priorityQueue.add(priorities[i]);
         }
-        int cnt = -1;
-        while(!q.isEmpty()){
-            Queue<Integer> tempQ = new LinkedList<>();
-            int current = q.poll();
-            cnt++;
-            tempQ.poll();
-            while(!tempQ.isEmpty()){
-                int temp = tempQ.poll();
-                if(temp>current){
-                    q.add(current);
-                }
+
+        while(!queue.isEmpty()){
+            Node node = queue.poll();
+            int index = node.index;
+            int temp = node.priority;
+
+            if(temp == priorityQueue.peek()){
+                answer++;
+                priorityQueue.poll();
+                if(index == location) break;
+            }else {
+                queue.add(node);
             }
+
         }
 
         return answer;
+    }
+
+
+    public static void main(String[] args){
+        Printer printer = new Printer();
+        System.out.println(printer.solution(new int[]{1,1,1},2));
+        System.out.println(printer.solution(new int[]{1,1,9,1,1,1},0));
+    }
+}
+class Node{
+    int index;
+    int priority;
+    Node(int index, int priority){
+        this.index = index;
+        this.priority = priority;
     }
 }
