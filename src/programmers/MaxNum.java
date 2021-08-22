@@ -1,8 +1,5 @@
 package programmers;
 
-import com.apple.eawt.AppEvent;
-
-import java.math.BigInteger;
 
 public class MaxNum {
     StringBuffer max = new StringBuffer();
